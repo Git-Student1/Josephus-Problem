@@ -1,0 +1,15 @@
+{
+  "name": "josehus_problem",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@svgdotjs/svg.js": "^3.2.5",
+    "vitest": "^4.0.15"
+  }
+}
