@@ -89,10 +89,13 @@ export function josProblem(n, stepSize) {
             pState = nextStep(pState, stepSize, createState);
             return {removed: lastRemoved(pState), currentElement: pState.leftOverElements[pState.currentLeftOverIndex], done:isFinished(pState)}
         },
+        nextExecutioner: function(){return pState.leftOverElements[pState.currentLeftOverIndex % pState.leftOverElements.length] },
         tryNextSteps: tryNextSteps,
         lastRemoved: function () { return lastRemoved(pState) },
         calculateResult: function () { return calculateResult(n, stepSize) },
         hasNext: function (){return !isFinished(pState)}
-    }.freeze()
+
+
+    }
 }
 
