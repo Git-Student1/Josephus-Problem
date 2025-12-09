@@ -84,7 +84,7 @@ export function josProblem(n, stepSize) {
 
     let pState = createInitialState(createAscendingArray(n, []), createState)
 
-    return {
+    return Object.freeze({
         next: function () {
             pState = nextStep(pState, stepSize, createState);
             return {removed: lastRemoved(pState), currentElement: pState.leftOverElements[pState.currentLeftOverIndex], done:isFinished(pState)}
@@ -96,6 +96,6 @@ export function josProblem(n, stepSize) {
         hasNext: function (){return !isFinished(pState)}
 
 
-    }
+    })
 }
 
