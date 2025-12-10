@@ -4,17 +4,43 @@
 <head>
     <title>Josephus Problem</title>
     <link rel="stylesheet" href="styles.css">
+
 </head>
 
 <body>
-    <div>
-        <label for="element_count"> people count: </label><input type="text" id="element_count" name="count" placeholder="Number of people"/>
-        <label for="step_size">step size:</label><input type="text" id="step_size" name="steps" placeholder="Kill n-th person to the right"/>
-        <button type="button" id="start_button">Start</button>
-        <button type="button" id="go_stop">---</button>
-        <label>result:</label> <label id="result"></label>
-        <script type="module" src="main.js"></script>
-        <svg width=" 1000" height="1000" viewBox="30 30 1000 1000" id="drawing" class="svg-wrapper"></svg>
+<script type="module" src="main.js"></script>
+    <div class="highest">
+        <h1 class="title">Josephus Problem</h1>
+        <div class="content">
+            <div class="displays">
+                <div class="controls">
+                    <h2>Controls</h2>
+                    <div class="container">
+                        <div>
+                            <label for="element_count"> people count: </label><input type="text" id="element_count" name="count" placeholder="Number of people"/>
+                        </div>
+                        <div>
+                            <label for="step_size">step size: </label><input type="text" id="step_size" name="steps" placeholder="Kill n-th person to the right"/>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <button type="button" id="go_stop">start</button>
+                    </div>
+
+                </div>
+                <div class="results">
+                    <h2>Results</h2>
+                    <div class="item">
+                        <div class="row">final result:</div> <div class = row id="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="graphics">
+                <svg width=" 1000" height="1000" viewBox="30 30 1000 1000" id="drawing" class="svg-wrapper"></svg>
+            </div>
+        </div>
     </div>
 </body>
 

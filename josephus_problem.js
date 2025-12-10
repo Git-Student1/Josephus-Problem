@@ -50,13 +50,13 @@ export function josProblem(n, stepSize) {
         }
         let removalIndex = nextRemovalIndex(state.currentLeftOverIndex, state.leftOverElements, stepSize)
         let lastRemoved = state.leftOverElements[removalIndex]
-        return createStateFn(state.allElements, removeElement(removalIndex, state.leftOverElements), removalIndex, lastRemoved)
+        //the state needs to be either saved here or needs to be handled by the calling part. As I wish to have it stored in this object, stored away from external manipulation it is necessary like this
+        pState =  createStateFn(state.allElements, removeElement(removalIndex, state.leftOverElements), removalIndex, lastRemoved)
     }
 
     function tryNextSteps() {
         while (pState.leftOverElements.length > 1) {
-            pState = nextStep(pState, stepSize, createState)
-            console.log(pState.lastRemoved, pState.currentLeftOverIndex)
+            nextStep(pState, stepSize, createState)
         }
 
         return pState.leftOverElements[0]
@@ -66,30 +66,62 @@ export function josProblem(n, stepSize) {
         return stateCreationFn(arr, [...arr], 0, undefined)
     }
 
-    function lastRemoved(state) {
-        return state.lastRemoved
-    }
-
     function calculateResult(n, stepSize) {
         function calculateRecursively(n, k){
             if (n ===1 )return 1
+            //formular taken from wikipedia: https://de.wikipedia.org/wiki/Josephus-Problem
             return (calculateRecursively(n-1, k) + k -1) %  n + 1
         }
         return calculateRecursively(n, stepSize+1)
     }
+
+    const stateManager =
+        function() {
+        let state
+            function createState(allElements, leftOverElements, currentIndex, lastRemoved) {
+                return {
+                    allElements: allElements,
+                    leftOverElements: leftOverElements,
+                    currentLeftOverIndex: currentIndex,
+                    lastRemoved: lastRemoved
+                }
+            }
+            return {
+                updateState: function updateState(allElements, leftOverElements, currentIndex, lastRemoved) {
+                    state = createState(allElements, leftOverElements, currentIndex, lastRemoved)
+                },
+                isFinished: function (state) {
+                    return state.leftOverElements.length <= 1
+                },
+                lastRemoved: function (state) {
+                    return state.lastRemoved
+                },
+                currentElement: function (state) {
+                    return state.leftOverElements[state.currentLeftOverIndex % state.leftOverElements.length]
+                }
+            }
+        }
+
     function isFinished(state){
         return state.leftOverElements.length <= 1
-
     }
-
+    function lastRemoved(state) {
+        return state.lastRemoved
+    }
+    function currentElement(state){
+        return state.leftOverElements[state.currentLeftOverIndex % state.leftOverElements.length]
+    }
     let pState = createInitialState(createAscendingArray(n, []), createState)
-
     return Object.freeze({
         next: function () {
-            pState = nextStep(pState, stepSize, createState);
-            return {removed: lastRemoved(pState), currentElement: pState.leftOverElements[pState.currentLeftOverIndex], done:isFinished(pState)}
+            nextStep(pState, stepSize, createState);
+            return {
+                removed: lastRemoved(pState),
+                done:isFinished(pState)
+            }
         },
-        nextExecutioner: function(){return pState.leftOverElements[pState.currentLeftOverIndex % pState.leftOverElements.length] },
+        nextExecutioner: function(){
+            return currentElement(pState) },
         tryNextSteps: tryNextSteps,
         lastRemoved: function () { return lastRemoved(pState) },
         calculateResult: function () { return calculateResult(n, stepSize) },
